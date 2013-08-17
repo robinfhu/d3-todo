@@ -1,0 +1,54 @@
+body {
+	font-family: Helvetica;
+}
+
+#info {
+	font-size: 25px;
+}
+
+#todos {
+	margin-top: 20px;
+}
+.todo-item {
+	border-bottom: solid 1px #e0e0e0;
+}
+
+.todo-item.selected {
+	background-color: #e2d6ff;
+}
+
+.todo-item div {
+	float: left;
+	margin-right: 15px;
+	padding: 8px;
+}
+
+.todo-item .clearfix {
+	clear:both;
+	padding: 0;
+	float:none;
+}
+
+.todo-item .desc {
+	width: 35%;
+}
+
+.todo-item .link {
+	color: blue;
+	cursor: pointer;
+	width: 50px;
+}
+
+.todo-item .link:hover {
+	background-color: steelblue;
+	color: #ccc;
+}
+
+.todo-item .status {
+	width: 50px;
+	cursor: pointer;
+}
+
+.todo-item .status.tested {
+	background-color: #ff3d81;
+}

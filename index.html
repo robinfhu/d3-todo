@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+	<title>Todo List</title>
+	<script src="d3.v3.js"></script>
+	<script src="jquery-2.0.3.js"></script>
+	<link type='text/css' rel='stylesheet' href='style.css'>
+</head>
+
+<body>
+<div id='info'>
+</div>
+<div id='todos'>
+</div>
+<script>
+/*
+desc: description of the todo
+link: link to a webpage
+status: is the todo done. Undefined by default.
+*/
+var todoData = [
+	{
+		desc: "Visit the Overview page and make sure it looks okay.",
+		link: "http://google.com"
+	},
+	{
+		desc: "Visit the Attribution page and make sure it looks okay.",
+		link: "http://yahoo.com"
+	},
+	{
+		desc: "Check grids on any page and make sure they can sort and page.",
+		link: "http://msn.com"
+	},
+	{
+		desc: "Check charts on all pages",
+		link: "http://ebay.com"
+	}
+];
+
+var todoEnter = d3.select("#todos").selectAll("div.todo-item")
+	.data(todoData)
+	.enter()
+	.append("div")
+	.attr("class","todo-item");
+
+todoEnter.append("div")
+		 .attr("class","desc")
+		 .text(function(d) {
+		 	return d.desc;
+		 });
+
+todoEnter.append("div")
+			.attr("class","link")
+			.text("Link")
+			.on("click",function(d) {
+				window.open(d.link);
+				d.status = true;
+				updateTodos();
+			});
+
+todoEnter.append("div")
+			.attr("class","status")
+			.on("click",function(d) {
+				d.status = !d.status;
+				updateTodos();
+			})
+			;
+
+todoEnter.append("div")
+		.attr("class","clearfix");
+
+function updateTodos() {
+	d3.selectAll("#todos div.status")
+				.text(function(d) {
+					if (!d.status) {
+						return "Pending";
+					}
+					else {
+						return "Tested";
+					}
+				})
+				.classed("tested",function(d) {
+					return d.status;
+				})
+				;
+
+	d3.select("#info")
+		.text(function() {
+			var total = todoData.length;
+			var totalDone = todoData.filter(function(d) { return d.status; }).length;
+			return "Completed: " + totalDone + "/" + total;
+		});
+
+	d3.selectAll("#todos .todo-item")
+		.classed("selected",function(d) {
+			return d.selected;
+		});
+}
+updateTodos();
+
+var selectedTodo = -1;
+
+$(document).on("keydown",function(evt) {
+	if (evt.which === 38)  //Up arrow
+		selectedTodo--;
+	else if (evt.which === 40)  //down arrow
+		selectedTodo++;
+
+
+	if (selectedTodo < 0) selectedTodo = todoData.length - 1;
+	selectedTodo = selectedTodo % todoData.length;
+
+	if (evt.which === 13) {
+		//ENTER key hit
+		var url = todoData[selectedTodo].link;
+		todoData[selectedTodo].status = true;
+		window.open(url,"_blank");
+		updateTodos();
+		return;
+	}
+
+	todoData.forEach(function(d) { d.selected = false;});
+	todoData[selectedTodo].selected = true;
+
+	
+	updateTodos();
+});
+</script>
+
+
+
+
+</body>
+</html>
